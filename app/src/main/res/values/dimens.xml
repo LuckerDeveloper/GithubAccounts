@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="standard_padding">8dp</dimen>
+
+    <dimen name="loading_error_size">32dp</dimen>
+
+    <dimen name="account_list_avatar_size">80dp</dimen>
+
+</resources>

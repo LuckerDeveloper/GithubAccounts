@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Github accounts</string>
+    <string name="error_toast_text">Something went wrong</string>
+</resources>
