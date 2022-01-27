@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Github accounts</string>
+
     <string name="error_toast_text">Something went wrong</string>
+
+    <string name="account_details_login">Login: </string>
+    <string name="account_details_id">Id: </string>
+    <string name="account_details_url">Site: </string>
+    <string name="account_details_name">Name: </string>
+    <string name="account_details_company">Company: </string>
+    <string name="account_details_location">Location: </string>
+    <string name="account_details_followers">Followers: </string>
+    <string name="account_details_created_at">Created at: </string>
 </resources>

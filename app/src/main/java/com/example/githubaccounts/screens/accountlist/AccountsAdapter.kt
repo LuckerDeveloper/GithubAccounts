@@ -27,11 +27,14 @@ class AccountsAdapter :
             Glide
                 .with(this.root.context)
                 .load(account.avatarUrl)
-                .placeholder(R.color.gray)
+                .placeholder(R.color.light_gray)
                 .into(avatar)
         }
-        holder.viewBinding.root.setOnClickListener{ view ->
-            val direction = AccountListFragmentDirections.actionAccountListFragmentToAccountDetailsFragment(account.id)
+        holder.viewBinding.root.setOnClickListener { view ->
+            val direction =
+                AccountListFragmentDirections.actionAccountListFragmentToAccountDetailsFragment(
+                    account.login
+                )
             view.findNavController().navigate(direction)
         }
     }

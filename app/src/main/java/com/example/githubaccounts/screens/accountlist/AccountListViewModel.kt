@@ -20,7 +20,7 @@ class AccountListViewModel @Inject constructor(
 
     fun loadAccounts() {
         viewModelScope.launch {
-            accountsRepository.loadAccounts()
+            accountsRepository.loadAccountList()
         }
     }
 }

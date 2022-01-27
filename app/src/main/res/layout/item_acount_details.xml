@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/standard_padding">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/param"
         style="@style/Text.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="King"
+        android:layout_margin="@dimen/account_details_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,8 +20,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_padding"
-        android:text="13245"
         app:layout_constraintBottom_toBottomOf="@id/param"
         app:layout_constraintStart_toEndOf="@id/param" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/delimiter_height"
+        android:layout_marginHorizontal="@dimen/account_details_padding"
+        android:background="@color/gray"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
