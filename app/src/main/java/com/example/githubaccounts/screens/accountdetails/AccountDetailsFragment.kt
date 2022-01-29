@@ -26,6 +26,11 @@ class AccountDetailsFragment : Fragment(R.layout.fragment_account_details) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.loadAccountDetails()
+
+        val login =
+            AccountDetailsFragmentArgs.fromBundle(requireArguments()).accountId
+        binding.collapsingToolbar.title = login
+
         subscribeUi()
     }
 

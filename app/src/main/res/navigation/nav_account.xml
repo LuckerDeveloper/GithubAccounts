@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/accountListFragment"
         android:name="com.example.githubaccounts.screens.accountlist.AccountListFragment"
-        android:label="fragment_account_list"
+        android:label="Github users"
         tools:layout="@layout/fragment_account_list">
         <action
             android:id="@+id/action_accountListFragment_to_accountDetailsFragment"

@@ -7,11 +7,22 @@
     android:layout_height="match_parent"
     tools:context=".screens.accountlist.AccountListFragment">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_collapseMode="pin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@color/white" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/accounts_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -8,6 +8,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.githubaccounts.R
 import com.example.githubaccounts.databinding.FragmentAccountListBinding
@@ -35,6 +38,10 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
             view.findNavController()
                 .navigate(R.id.action_accountListFragment_to_accountDetailsFragment)
         }
+
+        val navController = findNavController(this)
+        binding.toolbar
+            .setupWithNavController(navController, AppBarConfiguration(navController.graph))
 
         subscribeUi(adapter)
     }
