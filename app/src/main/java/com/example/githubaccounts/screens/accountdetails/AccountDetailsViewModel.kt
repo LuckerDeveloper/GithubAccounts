@@ -15,7 +15,7 @@ class AccountDetailsViewModel @Inject constructor(
     private val accountsRepository: AccountsRepository
 ) : ViewModel() {
 
-    val login = savedStateHandle.get<String>(ACCOUNT_ID_SAVED_STATE_KEY)!!
+    private val login = savedStateHandle.get<String>(ACCOUNT_ID_SAVED_STATE_KEY)!!
     val accountDetailsLiveData = accountsRepository.accountDetailsFlow.asLiveData()
 
     fun loadAccountDetails() {

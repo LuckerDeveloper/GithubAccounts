@@ -43,7 +43,7 @@ class AccountDetailsFragment : Fragment(R.layout.fragment_account_details) {
                     toLoadingState(false)
                     toErrorState(false)
                     val accountDetails = result.data
-                    val adapter = AccountsDetailsAdapter(createFields(result.data))
+                    val adapter = AccountsDetailsAdapter(createFields(accountDetails))
                     binding.accountDetails.adapter = adapter
                     Glide
                         .with(requireContext())
@@ -81,7 +81,6 @@ class AccountDetailsFragment : Fragment(R.layout.fragment_account_details) {
 
     private fun createFields(accountDetails: AccountDetails): List<Pair<String, String>> {
         return listOf(
-            Pair(getString(AccountDetailsFields.LOGIN.res), accountDetails.login),
             Pair(getString(AccountDetailsFields.ID.res), accountDetails.id.toString()),
             Pair(getString(AccountDetailsFields.URL.res), accountDetails.url),
             Pair(getString(AccountDetailsFields.NAME.res), accountDetails.name),

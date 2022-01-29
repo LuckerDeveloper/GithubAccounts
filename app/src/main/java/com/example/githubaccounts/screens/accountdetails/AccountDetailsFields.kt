@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import com.example.githubaccounts.R
 
 enum class AccountDetailsFields(@StringRes val res: Int) {
-    LOGIN(R.string.account_details_login),
     ID(R.string.account_details_id),
     URL(R.string.account_details_url),
     NAME(R.string.account_details_name),

@@ -1,3 +1,3 @@
 package com.example.githubaccounts.utils
 
-const val TAG = "AppTag"
+const val TAG = "[AppTag]"
