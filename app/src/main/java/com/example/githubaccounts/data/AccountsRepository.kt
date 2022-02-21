@@ -10,7 +10,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @Singleton
-class AccountsRepository @Inject constructor(private val accountsService: GithubAccountsService) {
+class AccountsRepository @Inject constructor(
+    private val accountsService: GithubAccountsService,
+    private val remoteDataSource: AccountsRemoteDataSource,
+    private val localDataSource: AccountsLocalDataSource,
+) {
 
     private val _accountDetailsFlow = MutableStateFlow<Result<AccountDetails>>(Result.Loading)
     val accountDetailsFlow: StateFlow<Result<AccountDetails>> = _accountDetailsFlow
@@ -20,12 +24,21 @@ class AccountsRepository @Inject constructor(private val accountsService: Github
 
     suspend fun loadAccountList() {
         _accountListFlow.emit(Result.Loading)
-        try {
-            val accountList = accountsService.getAccounts()
-            _accountListFlow.emit(Result.Success(accountList))
-        } catch (t: Throwable) {
-            _accountListFlow.emit(Result.Error(t))
-            Log.e(TAG, "net error: ${t.message}")
+        val localAccountList = localDataSource.getAccounts()
+        if (localAccountList is Result.Success && localAccountList.data.isNotEmpty()) {
+            _accountListFlow.emit(localAccountList)
+        }
+        when (val remoteRequestResult = remoteDataSource.getAccounts()) {
+            is Result.Success -> {
+                localDataSource.insertAll(remoteRequestResult.data)
+                val updatedLocalAccountList = localDataSource.getAccounts()
+                if (updatedLocalAccountList is Result.Success) {
+                    _accountListFlow.emit(updatedLocalAccountList)
+                } else if (updatedLocalAccountList is Result.Error) {
+                    _accountListFlow.emit(updatedLocalAccountList)
+                }
+            }
+            is Result.Error -> _accountListFlow.emit(remoteRequestResult)
         }
     }
 
