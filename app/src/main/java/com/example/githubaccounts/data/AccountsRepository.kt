@@ -3,9 +3,11 @@ package com.example.githubaccounts.data
 import android.util.Log
 import com.example.githubaccounts.api.GithubAccountsService
 import com.example.githubaccounts.utils.Result
+import com.example.githubaccounts.utils.State
 import com.example.githubaccounts.utils.TAG
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -19,26 +21,18 @@ class AccountsRepository @Inject constructor(
     private val _accountDetailsFlow = MutableStateFlow<Result<AccountDetails>>(Result.Loading)
     val accountDetailsFlow: StateFlow<Result<AccountDetails>> = _accountDetailsFlow
 
-    private val _accountListFlow = MutableStateFlow<Result<List<Account>>>(Result.Loading)
-    val accountListFlow: StateFlow<Result<List<Account>>> = _accountListFlow
+    val accountListFlow: Flow<List<Account>> = localDataSource.accountsFlow
+    private val _accountListNetworkState: MutableStateFlow<State> = MutableStateFlow(State.LOADING)
+    val accountListNetworkState: StateFlow<State> = _accountListNetworkState
 
     suspend fun loadAccountList() {
-        _accountListFlow.emit(Result.Loading)
-        val localAccountList = localDataSource.getAccounts()
-        if (localAccountList is Result.Success && localAccountList.data.isNotEmpty()) {
-            _accountListFlow.emit(localAccountList)
-        }
+        _accountListNetworkState.value = State.LOADING
         when (val remoteRequestResult = remoteDataSource.getAccounts()) {
             is Result.Success -> {
                 localDataSource.insertAll(remoteRequestResult.data)
-                val updatedLocalAccountList = localDataSource.getAccounts()
-                if (updatedLocalAccountList is Result.Success) {
-                    _accountListFlow.emit(updatedLocalAccountList)
-                } else if (updatedLocalAccountList is Result.Error) {
-                    _accountListFlow.emit(updatedLocalAccountList)
-                }
+                _accountListNetworkState.value = State.SUCCESS
             }
-            is Result.Error -> _accountListFlow.emit(remoteRequestResult)
+            is Result.Error -> _accountListNetworkState.value = State.ERROR
         }
     }
 

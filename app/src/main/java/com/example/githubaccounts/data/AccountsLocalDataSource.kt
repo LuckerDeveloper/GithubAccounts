@@ -1,19 +1,14 @@
 package com.example.githubaccounts.data
 
 import android.util.Log
-import com.example.githubaccounts.utils.Result
 import com.example.githubaccounts.utils.TAG
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class AccountsLocalDataSource @Inject constructor(private val accountDao: AccountDao) {
 
-    suspend fun getAccounts(): Result<List<Account>> {
-        return try {
-            Result.Success(accountDao.getAll())
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
+    val accountsFlow: Flow<List<Account>>
+        get() = accountDao.getAccountsFlow()
 
     suspend fun insertAll(accounts: List<Account>) {
         try {

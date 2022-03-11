@@ -1,7 +1,6 @@
 package com.example.githubaccounts.screens.accountlist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -14,8 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.example.githubaccounts.R
 import com.example.githubaccounts.databinding.FragmentAccountListBinding
-import com.example.githubaccounts.utils.Result
-import com.example.githubaccounts.utils.TAG
+import com.example.githubaccounts.utils.State
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,53 +21,51 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
 
     private val binding: FragmentAccountListBinding by viewBinding()
     private val viewModel: AccountListViewModel by viewModels()
+    private val adapter = AccountsAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val adapter = AccountsAdapter()
-        binding.accountsRecyclerView.adapter = adapter
-
-        binding.error.errorButton.setOnClickListener {
-            viewModel.loadAccounts()
-        }
-
-        binding.accountsRecyclerView.setOnClickListener {
-            view.findNavController()
-                .navigate(R.id.action_accountListFragment_to_accountDetailsFragment)
-        }
-
-        val navController = findNavController(this)
-        binding.toolbar
-            .setupWithNavController(navController, AppBarConfiguration(navController.graph))
-
+        setupUI(view)
         subscribeUi(adapter)
+        viewModel.loadAccounts()
     }
 
     private fun subscribeUi(adapter: AccountsAdapter) {
-        viewModel.accountsLiveData.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Result.Success -> {
-                    binding.accountsRecyclerView.isVisible = true
-                    toLoadingState(false)
+        viewModel.accountsLiveData.observe(viewLifecycleOwner) { accounts ->
+            if (accounts.isNotEmpty()) {
+                adapter.submitList(accounts)
+                toLoadingState(false)
+                toErrorState(false)
+            }
+        }
+        viewModel.accountsListNetworkState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                State.LOADING -> {
                     toErrorState(false)
-                    adapter.submitList(result.data)
+                    if (adapter.itemCount == 0) toLoadingState(true)
                 }
-                is Result.Error -> {
-                    binding.accountsRecyclerView.isVisible = false
+                State.ERROR -> {
                     toLoadingState(false)
-                    toErrorState(true)
-                    //Todo загружать кеш, если кеш пуст, то показывать кнопку новой попытки
-                    Log.v(TAG, "error: ${result.t.message}")
-                    Toast.makeText(requireContext(), R.string.error_toast_text, Toast.LENGTH_SHORT)
-                        .show()
-                }
-                is Result.Loading -> {
-                    binding.accountsRecyclerView.isVisible = false
-                    toErrorState(false)
-                    toLoadingState(true)
+                    Toast.makeText(requireContext(), "Network error", Toast.LENGTH_LONG).show()
+                    if (adapter.itemCount == 0) toErrorState(true)
                 }
             }
+        }
+    }
+
+    private fun setupUI(view: View) {
+        binding.apply {
+            accountsRecyclerView.adapter = adapter
+            accountsRecyclerView.setOnClickListener {
+                view.findNavController()
+                    .navigate(R.id.action_accountListFragment_to_accountDetailsFragment)
+            }
+            error.errorButton.setOnClickListener {
+                viewModel.loadAccounts()
+            }
+            val navController = findNavController(this@AccountListFragment)
+            toolbar
+                .setupWithNavController(navController, AppBarConfiguration(navController.graph))
         }
     }
 
@@ -80,5 +76,4 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
     private fun toErrorState(isVisible: Boolean) {
         binding.error.root.isVisible = isVisible
     }
-
 }

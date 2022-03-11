@@ -13,10 +13,7 @@ class AccountListViewModel @Inject constructor(
     private val accountsRepository: AccountsRepository
 ) : ViewModel() {
     val accountsLiveData = accountsRepository.accountListFlow.asLiveData()
-
-    init {
-        loadAccounts()
-    }
+    val accountsListNetworkState = accountsRepository.accountListNetworkState.asLiveData()
 
     fun loadAccounts() {
         viewModelScope.launch {
