@@ -17,6 +17,7 @@ buildscript {
         recyclerViewVersion = '1.2.1'
         retrofit2Version = '2.9.0'
         roomVersion = '2.3.0'
+        swipeRefreshLayoutVersion = '1.1.0'
         viewBindingDelegateVersion = '1.5.3'
         junitVersion = '4.13.2'
         junitAndroidVersion = '1.1.3'

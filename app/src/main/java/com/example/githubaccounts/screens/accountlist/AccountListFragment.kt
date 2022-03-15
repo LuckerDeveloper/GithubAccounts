@@ -40,13 +40,21 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
         }
         viewModel.accountsListNetworkState.observe(viewLifecycleOwner) { state ->
             when (state) {
+                State.SUCCESS -> {
+                    binding.swipeContainer.isRefreshing = false
+                }
                 State.LOADING -> {
                     toErrorState(false)
-                    if (adapter.itemCount == 0) toLoadingState(true)
+                    if (adapter.itemCount == 0) {
+                        toLoadingState(true)
+                    } else {
+                        binding.swipeContainer.isRefreshing = true
+                    }
                 }
                 State.ERROR -> {
                     toLoadingState(false)
                     Toast.makeText(requireContext(), "Network error", Toast.LENGTH_LONG).show()
+                    binding.swipeContainer.isRefreshing = false
                     if (adapter.itemCount == 0) toErrorState(true)
                 }
             }
@@ -66,6 +74,9 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
             val navController = findNavController(this@AccountListFragment)
             toolbar
                 .setupWithNavController(navController, AppBarConfiguration(navController.graph))
+            swipeContainer.setOnRefreshListener {
+                viewModel.loadAccounts()
+            }
         }
     }
 

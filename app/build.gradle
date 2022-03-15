@@ -49,6 +49,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipeRefreshLayoutVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecyclerVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecyclerVersion"
     implementation "androidx.cardview:cardview:$cardViewVersion"
