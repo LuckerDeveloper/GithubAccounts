@@ -21,13 +21,19 @@ class AccountListFragment : Fragment(R.layout.fragment_account_list) {
 
     private val binding: FragmentAccountListBinding by viewBinding()
     private val viewModel: AccountListViewModel by viewModels()
-    private val adapter = AccountsAdapter()
+    private val adapter = AccountsAdapter { account ->
+        viewModel.deleteAccount(account)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.loadAccounts()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI(view)
         subscribeUi(adapter)
-        viewModel.loadAccounts()
     }
 
     private fun subscribeUi(adapter: AccountsAdapter) {

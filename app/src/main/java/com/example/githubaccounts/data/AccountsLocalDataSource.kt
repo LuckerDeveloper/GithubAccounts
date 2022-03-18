@@ -17,4 +17,12 @@ class AccountsLocalDataSource @Inject constructor(private val accountDao: Accoun
             Log.e(TAG, e.message, e)
         }
     }
+
+    suspend fun delete(account: Account) {
+        try {
+            accountDao.delete(account)
+        } catch (e: Exception) {
+            Log.e(TAG, e.message, e)
+        }
+    }
 }

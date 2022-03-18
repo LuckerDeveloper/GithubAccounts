@@ -46,4 +46,8 @@ class AccountsRepository @Inject constructor(
             Log.e(TAG, "net error: ${t.message}")
         }
     }
+
+    suspend fun deleteAccount(account: Account) {
+        localDataSource.delete(account)
+    }
 }

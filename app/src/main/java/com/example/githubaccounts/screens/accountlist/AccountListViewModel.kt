@@ -3,6 +3,7 @@ package com.example.githubaccounts.screens.accountlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.githubaccounts.data.Account
 import com.example.githubaccounts.data.AccountsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -18,6 +19,12 @@ class AccountListViewModel @Inject constructor(
     fun loadAccounts() {
         viewModelScope.launch {
             accountsRepository.loadAccountList()
+        }
+    }
+
+    fun deleteAccount(account: Account) {
+        viewModelScope.launch {
+            accountsRepository.deleteAccount(account)
         }
     }
 }

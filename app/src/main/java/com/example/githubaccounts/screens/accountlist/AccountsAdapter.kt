@@ -11,7 +11,7 @@ import com.example.githubaccounts.R
 import com.example.githubaccounts.data.Account
 import com.example.githubaccounts.databinding.ItemAccountBinding
 
-class AccountsAdapter :
+class AccountsAdapter(val onDeleteClick: (Account) -> Unit) :
     ListAdapter<Account, AccountsAdapter.AccountsViewHolder>(AccountItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsViewHolder {
@@ -29,13 +29,16 @@ class AccountsAdapter :
                 .load(account.avatarUrl)
                 .placeholder(R.color.light_gray)
                 .into(avatar)
-        }
-        holder.viewBinding.root.setOnClickListener { view ->
-            val direction =
-                AccountListFragmentDirections.actionAccountListFragmentToAccountDetailsFragment(
-                    account.login
-                )
-            view.findNavController().navigate(direction)
+            root.setOnClickListener { view ->
+                val direction =
+                    AccountListFragmentDirections.actionAccountListFragmentToAccountDetailsFragment(
+                        account.login
+                    )
+                view.findNavController().navigate(direction)
+            }
+            deleteButton.setOnClickListener {
+                onDeleteClick(account)
+            }
         }
     }
 
